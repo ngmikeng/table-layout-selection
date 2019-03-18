@@ -1,0 +1,26 @@
+
+.tls--container {
+  width: 150px;
+  text-align: center;
+  font-family: 'sans-serif';
+  border: 1px solid #ddd;
+}
+
+.tls--container .tls--heading {
+  background: #cdcdcd;
+}
+
+.tls--table-row {
+  line-height: 0;
+}
+.tls--table-col {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #ddd;
+  margin: 1px;
+}
+
+.tls--table-col .active {
+  border-color: orange;
+}

@@ -1,0 +1,24 @@
+{
+  "name": "table-layout-selection",
+  "version": "0.0.1",
+  "description": "A simple table layout selection",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ngmikeng/table-layout-selection.git"
+  },
+  "keywords": [
+    "js",
+    "table-layout",
+    "layout-selection"
+  ],
+  "author": "Minh Nguyen",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ngmikeng/table-layout-selection/issues"
+  },
+  "homepage": "https://github.com/ngmikeng/table-layout-selection#readme"
+}
