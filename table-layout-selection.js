@@ -3,7 +3,7 @@
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as an anonymous module.
     define([], function() {
-      return (root.returnExportsGlobal = factory());
+      return (root.MnTableLayoutSelection = factory());
     });
   } else if (typeof module === 'object' && module.exports) {
     // Node. Does not work with strict CommonJS, but
@@ -12,7 +12,7 @@
     module.exports = factory();
   } else {
     // Browser globals
-    root.returnExportsGlobal = factory();
+    root.MnTableLayoutSelection = factory();
   }
 }(typeof self !== 'undefined' ? self : this, function() {
   function TableLayoutSelection(opts) {
