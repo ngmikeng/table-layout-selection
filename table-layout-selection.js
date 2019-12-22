@@ -17,10 +17,8 @@
 }(typeof self !== 'undefined' ? self : this, function() {
   function TableCell(rowIndex, colIndex, opts) {
     opts = opts ? opts : {};
-    this.rowIndex = rowIndex || 1;
-    this.colIndex = colIndex || 1;
-    this.borderColorDefault = opts.borderColorDefault || '#ddd';
-    this.borderColorHover = opts.borderColorHover || 'blue';
+    this.rowIndex = Math.floor(rowIndex) || 1;
+    this.colIndex = Math.floor(colIndex) || 1;
   }
 
   /**
@@ -57,10 +55,7 @@
         rowEle.setAttribute('class', 'tls--table-row');
         for (var colIndex = 1; colIndex <= maxCol; colIndex++) {
           // create a table cell
-          var tableCell = new TableCell(rowIndex, colIndex, {
-            borderColorDefault: this.styles.cellBorderColorDefault,
-            borderColorHover: this.styles.cellBorderColorHover
-          });
+          var tableCell = new TableCell(rowIndex, colIndex);
           var cellEle = document.createElement('div');
           cellEle.setAttribute('class', 'tls--table-col');
           cellEle.setAttribute('data-row', tableCell.rowIndex);
@@ -72,7 +67,7 @@
           });
           this.bindCellClickEvent(cellEle, function(dataSet) {
             if (typeof self.events.onCellClick === 'function') {
-              self.events.onCellClick(dataSet);
+              self.events.onCellClick(new TableCell(dataSet.row, dataSet.col));
             }
           });
 

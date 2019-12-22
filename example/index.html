@@ -9,7 +9,7 @@
 </head>
 <body>
     <div class="main-container">
-        <div id="my-table"><div>
+        <div id="my-table"></div>
     </div>
 
     <script src="../table-layout-selection.js"></script>
@@ -20,6 +20,7 @@
               containerSelector: '#my-table',
               rows: 5,
               cols: 5,
+              cellBorderColorHover: 'orange',
               onCellClick: function(data) {
                 console.log(data);
               }
