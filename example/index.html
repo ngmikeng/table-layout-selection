@@ -19,7 +19,10 @@
             var opts = {
               containerSelector: '#my-table',
               rows: 5,
-              cols: 5
+              cols: 5,
+              onCellClick: function(data) {
+                console.log(data);
+              }
             };
             var tableSelection = new MnTableLayoutSelection(opts);
 

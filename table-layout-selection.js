@@ -15,46 +15,81 @@
     root.MnTableLayoutSelection = factory();
   }
 }(typeof self !== 'undefined' ? self : this, function() {
+  function TableCell(rowIndex, colIndex, opts) {
+    opts = opts ? opts : {};
+    this.rowIndex = rowIndex || 1;
+    this.colIndex = colIndex || 1;
+    this.borderColorDefault = opts.borderColorDefault || '#ddd';
+    this.borderColorHover = opts.borderColorHover || 'blue';
+  }
+
+  /**
+   * Main class
+   */
   function TableLayoutSelection(opts) {
     opts = opts ? opts : {};
     this.options = opts;
     this.containerSelector = opts.containerSelector;
+    this.containerElement = document.querySelector(this.containerSelector);
+    if (!this.containerElement) {
+      throw new Error('Not found container element');
+    }
     this.rows = Math.floor(opts.rows) || 6;
     this.cols = Math.floor(opts.cols) || 6;
+    this.styles = {
+      cellBorderColorDefault: opts.cellBorderColorDefault || '#ddd',
+      cellBorderColorHover: opts.cellBorderColorHover || 'blue'
+    };
+    this.events = {
+      onCellClick: opts.onCellClick
+    }
   }
 
   TableLayoutSelection.prototype = {
     render: function() {
-      var containerElement = document.querySelector(this.containerSelector);
+      var self = this;
       var maxRow = this.rows;
       var maxCol = this.cols;
+      var tableEle = document.createElement('div');
+      tableEle.setAttribute('class', 'tls--container');
       for (var rowIndex = 1; rowIndex <= maxRow; rowIndex++) {
-        var rowData = [];
         var rowEle = document.createElement('div');
         rowEle.setAttribute('class', 'tls--table-row');
         for (var colIndex = 1; colIndex <= maxCol; colIndex++) {
-          var colData = {
-            label: colIndex + ' x ' + rowIndex,
-            row: rowIndex,
-            col: colIndex
-          };
-          rowData.push(colData);
+          // create a table cell
+          var tableCell = new TableCell(rowIndex, colIndex, {
+            borderColorDefault: this.styles.cellBorderColorDefault,
+            borderColorHover: this.styles.cellBorderColorHover
+          });
           var cellEle = document.createElement('div');
           cellEle.setAttribute('class', 'tls--table-col');
-          cellEle.setAttribute('data-row', colData.row);
-          cellEle.setAttribute('data-col', colData.col);
-          cellEle.setAttribute('data-label', colData.label);
+          cellEle.setAttribute('data-row', tableCell.rowIndex);
+          cellEle.setAttribute('data-col', tableCell.colIndex);
 
           // bind events
-          this.bindMouseoverEvents(cellEle, this.eventMouseoverHandler);
+          this.bindMouseoverEvent(cellEle, function(dataSet) {
+            self.eventMouseoverHandler(dataSet);
+          });
+          this.bindCellClickEvent(cellEle, function(dataSet) {
+            if (typeof self.events.onCellClick === 'function') {
+              self.events.onCellClick(dataSet);
+            }
+          });
 
           rowEle.appendChild(cellEle);
         }
-        containerElement.appendChild(rowEle);
+        tableEle.appendChild(rowEle);
       }
+      // create footer info
+      var footerEle = document.createElement('div');
+      footerEle.setAttribute('class', 'tls--table-footer');
+      footerEle.style.width = this.containerElement.width;
+      tableEle.appendChild(footerEle)
+
+      this.containerElement.appendChild(tableEle);
     },
 
-    bindMouseoverEvents: function(element, callbackHandler) {
+    bindMouseoverEvent: function(element, callbackHandler) {
       if (element) {
         element.addEventListener('mouseover', function(event) {
           var dataset = event.target.dataset;
@@ -67,7 +102,8 @@
 
     eventMouseoverHandler: function(data) {
       if (data) {
-        var cells = document.querySelectorAll('.tls--table-col');
+        var self = this;
+        var cells = this.containerElement.querySelectorAll('.tls--table-col');
         var rowVal = data.row * 1;
         var colVal = data.col * 1;
         cells.forEach(function(cell) {
@@ -75,10 +111,23 @@
             var cellRow = cell.dataset.row * 1;
             var cellCol = cell.dataset.col * 1;
             if (cellRow <= rowVal && cellCol <= colVal) {
-              cell.style.borderColor = 'blue';
+              cell.style.borderColor = self.styles.cellBorderColorHover;
+              var footerELe = self.containerElement.querySelector('.tls--table-footer');
+              footerELe.innerHTML = '<span>' + cellRow + ' x ' + cellCol + '</span>';
             } else {
-              cell.style.borderColor = '#ddd';
+              cell.style.borderColor = self.styles.cellBorderColorDefault;
             }
+          }
+        });
+      }
+    },
+
+    bindCellClickEvent: function(cellElement, callbackHandler) {
+      if (cellElement) {
+        cellElement.addEventListener('click', function(event) {
+          var dataset = event.target.dataset;
+          if (typeof callbackHandler === 'function') {
+            callbackHandler(dataset);
           }
         });
       }
