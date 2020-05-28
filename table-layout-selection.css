@@ -1,4 +1,9 @@
 
+.tls-main {
+  position: absolute;
+  padding: 5px;
+}
+
 .tls--container {
   width: fit-content;
   text-align: center;
@@ -7,6 +12,10 @@
 
 .tls--container .tls--heading {
   background: #cdcdcd;
+}
+
+.tls--container.is-hidden {
+  display: none;
 }
 
 .tls--table-row {

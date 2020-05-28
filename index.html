@@ -20,17 +20,15 @@
     window.onload = function () {
       if (window.MnTableLayoutSelection) {
         var opts = {
-          containerSelector: '#my-table',
+          parentEle: document.getElementById('my-table'),
           rows: 5,
           cols: 5,
           cellBorderColorHover: 'orange',
-          onCellClick: function (data) {
+          onCellClick: function(data) {
             console.log(data);
           }
         };
         var tableSelection = new MnTableLayoutSelection(opts);
-
-        tableSelection.render();
       }
     }
   </script>
